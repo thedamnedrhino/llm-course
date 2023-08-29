@@ -1,5 +1,5 @@
 ## Generating (Summaries) Using Model and Tokenizer
-```
+```python
 def batch_generator(data: list, batch_size: int):
     """
     Creates batches of size `batch_size` from a list.
