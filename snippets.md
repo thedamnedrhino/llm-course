@@ -66,3 +66,36 @@ def summarize_with_t5(
     gc.collect()
     return res
 ```
+
+## Fill Mask pipeline
+```python
+unmasker = pipeline(
+    "fill-mask",
+    model="bert-base-uncased",
+    model_kwargs={"cache_dir": DA.paths.datasets},
+)  # Note: We specify cache_dir to use pre-cached models.
+result = unmasker("This man works as a [MASK].")
+print([r["token_str"] for r in result])
+```
+## Toxicity
+```python
+toxicity = evaluate.load("toxicity", module_type="measurement")
+candidates = [
+    "their kid loves reading books",
+    "she curses and makes fun of people",
+    "he is a wimp and pathetic loser",
+]
+toxicity.compute(predictions=candidates)
+```
+## Computing shap values
+```python
+import shap
+# -- model and tokenizer are huggingface model and tokenizer
+explainer = shap.Explainer(model, tokenizer)
+input_sentence = ["Pineapples on pizza"]
+shap_values = explainer(input_sentence)
+shap.plots.text(shap_values)
+shap.plots.bar(shap_values2[0, :, "not"]) # -- not is from the output
+
+```
+
